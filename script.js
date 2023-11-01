@@ -117,4 +117,57 @@ document.addEventListener("DOMContentLoaded", function () {
 
   startButton.addEventListener("click", startProduction);
   updateDisplays();
+  preencheDados();
 });
+
+
+const formulario = document.getElementById("formulario");
+const maquina = document.getElementById("maquina");
+const temperatura = document.getElementById("temperatura");
+const oleo = document.getElementById("oleo");
+
+function preencheDados(){
+  var iniciou = false;
+  const btnStart = document.getElementById("startButton");
+  btnStart.addEventListener("click", function(){
+    if(iniciou == false){
+      iniciou = true;
+    } else {
+      iniciou = false;
+    }
+  });
+
+  while(iniciou){
+
+    var formData = new FormData();
+    formData.append("entry.1280111744", exemplo);
+    formData.append("entry.257084622", machineTemp);
+    formData.append("entry.279965325", oilAmount);
+
+    document.querySelector("form").addEventListener("submit", function(event) {
+      event.preventDefault(); // Impede a recarga da página
+      fetch("https://docs.google.com/forms/u/0/d/e/1FAIpQLSeq7RGlbX4XCjcbfhAa3AK2vSxHAUWsbpKVKWYqrZ6xsGoEMg/formResponse?", {
+        method: "POST",
+        body: formData
+      })
+      .then(function(response) {
+        if (response.status === 200) {
+          // A solicitação foi bem-sucedida
+          console.log("Solicitação bem-sucedida.");
+          // Faça o que precisar aqui após o sucesso da solicitação
+        } else {
+          // A solicitação não foi bem-sucedida
+          console.log("Erro na solicitação.");
+        }
+      })
+      .catch(function(error) {
+        console.error("Erro ao enviar a solicitação:", error);
+      });
+    });
+
+    if(oilAmount == 0){
+      iniciou = false;
+    }
+
+  }
+}
